@@ -2,15 +2,13 @@
 
 namespace App\Service;
 
-
 use App\Entity\User;
-use Doctrine\Common\Collections\Criteria;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ObjectRepository;
 
 class UserService
 {
+    /** @var EntityManagerInterface */
     private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -18,37 +16,54 @@ class UserService
         $this->entityManager = $entityManager;
     }
 
-    public function create(string $login): User
+    public function saveUser(string $login): ?int
     {
         $user = new User();
         $user->setLogin($login);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return $user;
+        return $user->getId();
     }
 
-    public function clearEntityManager(): void
+    public function updateUser(int $userId, string $login): bool
     {
-        $this->entityManager->clear();
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User $user */
+        $user = $userRepository->find($userId);
+        if ($user === null) {
+            return false;
+        }
+        $user->setLogin($login);
+        $this->entityManager->flush();
+
+        return true;
     }
 
-    public function findUser(int $id): ?User
+    public function deleteUser(int $userId): bool
     {
-        $repository = $this->entityManager->getRepository(User::class);
-        $user = $repository->find($id);
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User $user */
+        $user = $userRepository->find($userId);
+        if ($user === null) {
+            return false;
+        }
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
 
-        return $user instanceof User ? $user : null;
+        return true;
     }
 
     /**
-     * @return array<User>
+     * @return User[]
      */
-    public function findUsersByLogin(string $name): array
+    public function getUsers(int $page, int $perPage): array
     {
-        $repository = $this->entityManager->getRepository(User::class);
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
 
-        return $repository->findBy(['login' => $name]);
+        return $userRepository->getUsers($page, $perPage);
     }
-
 }

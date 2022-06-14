@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Course\AddCourse\v1;
+namespace App\Controller\Api\Course\DeleteCourse\v1;
 
 use App\Entity\Course;
 use App\Service\CourseService;
@@ -20,17 +20,14 @@ class Controller
     }
 
     /**
-     * @Route("/api/v1/add-course", methods={"POST"})
+     * @Route("/api/v1/delete-course", methods={"DELETE"})
      *
      */
-    public function addCourseAction(Request $request): Response
+    public function deleteCourseAction(Request $request): Response
     {
-        $courseTitle = $request->request->get('title');
-        $courseId = $this->courseService->saveCourse($courseTitle);
-        [$data, $code] = $courseId === null ?
-            [['success' => false], 400] :
-            [['success' => true, 'courseId' => $courseId], 200];
+        $courseId = $request->query->get('courseId');
+        $result = $this->courseService->deleteCourse($courseId);
 
-        return new JsonResponse($data, $code);
+        return new JsonResponse(['success' => $result], $result ? 200 : 404);
     }
 }

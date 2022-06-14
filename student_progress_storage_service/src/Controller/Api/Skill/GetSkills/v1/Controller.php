@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Api\User\GetUsers\v1;
+namespace App\Controller\Api\Skill\GetSkills\v1;
 
-use App\Entity\User;
-use App\Service\UserService;
+use App\Entity\Skill;
+use App\Service\SkillService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,24 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class Controller
 {
 
-    private UserService $userService;
+    private SkillService $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(SkillService $skillService)
     {
-        $this->userService = $userService;
+        $this->skillService = $skillService;
     }
 
     /**
-     * @Route("/api/v1/get-user", methods={"GET"})
+     * @Route("/api/v1/get-skill", methods={"GET"})
      *
      */
-    public function getUserAction(Request $request): Response
+    public function getSkillAction(Request $request): Response
     {
         $perPage = $request->query->get('perPage');
         $page = $request->query->get('page');
-        $users = $this->userService->getUsers($page ?? 0, $perPage ?? 20);
-        $code = empty($users) ? 204 : 200;
+        $skills = $this->skillService->getSkills($page ?? 0, $perPage ?? 20);
+        $code = empty($skills) ? 204 : 200;
 
-        return new JsonResponse(['users' => array_map(static fn(User $user) => $user->toArray(), $users)], $code);
+        return new JsonResponse(['skills' => array_map(static fn(Skill $skill) => $skill->toArray(), $skills)], $code);
     }
 }

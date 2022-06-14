@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Api\User\UpdateUser\v1;
+namespace App\Controller\Api\Skill\UpdateSkill\v1;
 
-use App\Entity\User;
-use App\Service\UserService;
+use App\Entity\Skill;
+use App\Service\SkillService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,22 +12,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class Controller
 {
 
-    private UserService $userService;
+    private SkillService $skillService;
 
-    public function __construct(UserService $userService)
+    public function __construct(SkillService $skillService)
     {
-        $this->userService = $userService;
+        $this->skillService = $skillService;
     }
 
     /**
-     * @Route("/api/v1/update-user", methods={"PATCH"})
+     * @Route("/api/v1/update-skill", methods={"PATCH"})
      *
      */
-    public function updateUserAction(Request $request): Response
+    public function updateSkillAction(Request $request): Response
     {
-        $userId = $request->request->get('userId');
-        $login = $request->request->get('login');
-        $result = $this->userService->updateUser($userId, $login);
+        $skillId = $request->request->get('skillId');
+        $skillName = $request->request->get('skillName');
+        $result = $this->skillService->updateSkill($skillId, $skillName);
 
         return new JsonResponse(['success' => $result], $result ? 200 : 404);
     }

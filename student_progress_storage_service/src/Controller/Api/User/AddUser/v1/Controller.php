@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\AddUser\v1;
+namespace App\Controller\Api\User\AddUser\v1;
 
 use App\Entity\User;
 use App\Service\UserService;
