@@ -2,15 +2,15 @@
 
 namespace App\Repository;
 
-use App\Entity\Progress;
+use App\Entity\Unit;
 use Doctrine\ORM\EntityRepository;
 
-class ProgressRepository extends EntityRepository
+class UnitRepository extends EntityRepository
 {
     /**
-     * @return Progress[]
+     * @return Unit[]
      */
-    public function getProgresss(int $page, int $perPage): array
+    public function getUnits(int $page, int $perPage): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('t')

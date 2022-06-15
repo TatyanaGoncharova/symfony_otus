@@ -78,6 +78,16 @@ class Unit
         $this->task = $task;
     }
 
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): void
+    {
+        $this->skill = $skill;
+    }
+
     public function toArray(): array
     {
         return [
