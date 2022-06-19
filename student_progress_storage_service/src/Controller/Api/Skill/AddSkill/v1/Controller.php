@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Api\User\AddUser\v1;
+namespace App\Controller\Api\Skill\AddSkill\v1;
 
-use App\Entity\User;
-use App\Service\UserService;
+use App\Entity\Skill;
+use App\Service\SkillService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,24 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class Controller
 {
 
-    private UserService $userService;
+    private SkillService $skillService;
 
-    public function __construct(UserService $userService)
+    public function __construct(SkillService $skillService)
     {
-        $this->userService = $userService;
+        $this->skillService = $skillService;
     }
 
     /**
-     * @Route("/api/v1/add-user", methods={"POST"})
+     * @Route("/api/v1/add-skill", methods={"POST"})
      *
      */
-    public function addUserAction(Request $request): Response
+    public function addSkillAction(Request $request): Response
     {
-        $login = $request->request->get('login');
-        $userId = $this->userService->saveUser($login);
-        [$data, $code] = $userId === null ?
+        $skillName = $request->request->get('name');
+        $skillId = $this->skillService->saveSkill($skillName);
+        [$data, $code] = $skillId === null ?
             [['success' => false], 400] :
-            [['success' => true, 'userId' => $userId], 200];
+            [['success' => true, 'skillId' => $skillId], 200];
 
         return new JsonResponse($data, $code);
     }

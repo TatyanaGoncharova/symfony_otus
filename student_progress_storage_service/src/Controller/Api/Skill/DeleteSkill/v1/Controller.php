@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Api\User\DeleteUser\v1;
+namespace App\Controller\Api\Skill\DeleteSkill\v1;
 
-use App\Entity\User;
-use App\Service\UserService;
+use App\Entity\Skill;
+use App\Service\SkillService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,21 +12,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class Controller
 {
 
-    private UserService $userService;
+    private SkillService $skillService;
 
-    public function __construct(UserService $userService)
+    public function __construct(SkillService $skillService)
     {
-        $this->userService = $userService;
+        $this->skillService = $skillService;
     }
 
     /**
-     * @Route("/api/v1/delete-user", methods={"DELETE"})
+     * @Route("/api/v1/delete-skill", methods={"DELETE"})
      *
      */
-    public function deleteUserAction(Request $request): Response
+    public function deleteSkillAction(Request $request): Response
     {
-        $userId = $request->query->get('userId');
-        $result = $this->userService->deleteUser($userId);
+        $skillId = $request->query->get('skillId');
+        $result = $this->skillService->deleteSkill($skillId);
 
         return new JsonResponse(['success' => $result], $result ? 200 : 404);
     }
