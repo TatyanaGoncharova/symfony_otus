@@ -35,13 +35,28 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/v1/delete-user, roles: ROLE_ADMIN, methods: [DELETE] }
-        - { path: ^/api/v1/delete-lesson, roles: ROLE_ADMIN, methods: [DELETE] }
-        - { path: ^/api/v1/delete-task, roles: ROLE_ADMIN, methods: [DELETE] }
-        - { path: ^/api/v1/delete-skill, roles: ROLE_ADMIN, methods: [DELETE] }
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/v1/get-progress, roles: [ ROLE_STUDENT] , methods: [ GET ] }
+        - { path: ^/api/v1/get-task, roles: [ ROLE_STUDENT], methods: [ GET ] }
+        - { path: ^/api/v1/get-lesson, roles: ROLE_STUDENT, methods: [ GET ] }
+        - { path: ^/api/v1/update-progress, roles: [ ROLE_TEACHER ] , methods: [ PATCH ] }
+        - { path: ^/api/v1/update-task, roles: [ ROLE_TEACHER ], methods: [ PATCH ] }
+        - { path: ^/api/v1/update-lesson, roles: ROLE_TEACHER, methods: [ PATCH ] }
+        - { path: ^/api/v1/update-unit, roles: ROLE_TEACHER, methods: [ PATCH ] }
+        - { path: ^/api/v1/add-unit, roles: ROLE_TEACHER, methods: [ POST ] }
+        - { path: ^/api/v1/delete-unit, roles: ROLE_TEACHER, methods: [ DELETE ] }
+        - { path: ^/api/v1/get-unit, roles: ROLE_TEACHER, methods: [ GET ] }
+        - { path: ^/api/v1/get-token, roles: ROLE_STUDENT, methods: [ GET ] }
+        - { path: ^/api/v1/delete-user, roles: ROLE_ADMIN, methods: [ DELETE ] }
+        - { path: ^/api/v1/delete-course, roles: ROLE_ADMIN, methods: [ DELETE ] }
+        - { path: ^/api/v1/delete-skill, roles: ROLE_ADMIN, methods: [ DELETE ] }
+        - { path: ^/api/v1/, roles: ROLE_MANAGER, methods: [ GET, POST, DELETE, PATCH ] }
+        # - { path: ^/admin, roles: ROLE_USER }
+        # - { path: ^/profile, roles: ROLE_MANAGER }
 
+    role_hierarchy:
+        ROLE_MANAGER: ROLE_STUDENT, ROLE_TEACHER
+        ROLE_ADMIN: ROLE_MANAGER
+        ROLE_TEACHER: ROLE_STUDENT
 when@test:
     security:
         password_hashers:
