@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="unit__task_id__ind", columns={"task_id"}),
  *         @ORM\Index(name="unit__skill_id__ind", columns={"skill_id"})
  *     }))
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=App\Repository\UnitRepository::class)
  */
 class Unit
 {

@@ -22,11 +22,14 @@ class Controller
     /**
      * @Route("/api/v1/add-user", methods={"POST"})
      *
+     * @throws \JsonException
      */
     public function addUserAction(Request $request): Response
     {
         $login = $request->request->get('login');
-        $userId = $this->userService->saveUser($login);
+        $password = $request->request->get('password');
+        $roles = $request->request->get('roles');
+        $userId = $this->userService->saveUser($login, $password, $roles);
         [$data, $code] = $userId === null ?
             [['success' => false], 400] :
             [['success' => true, 'userId' => $userId], 200];

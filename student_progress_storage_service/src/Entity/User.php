@@ -7,13 +7,16 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(name="id", type="bigint", unique=true)
@@ -25,7 +28,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=32, nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false, unique=true)
      */
     private string $login;
 
@@ -46,6 +49,15 @@ class User
      */
     private Collection $progressStates;
 
+    /**
+     * @ORM\Column(type="string", length=120, nullable=false)
+     */
+    private string $password;
+
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=false)
+     */
+    private string $roles = '{}';
 
     public function __construct()
     {
@@ -107,6 +119,28 @@ class User
         }
     }
 
+    /**
+     * @return string[]
+     *
+     * @throws JsonException
+     */
+    public function getRoles(): array
+    {
+        $roles = json_decode($this->roles, true, 512, JSON_THROW_ON_ERROR);
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    /**
+     * @param string[] $roles
+     *
+     * @throws JsonException
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = json_encode($roles, JSON_THROW_ON_ERROR);
+    }
+
     public function toArray(): array
     {
         return [
@@ -115,5 +149,35 @@ class User
             'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
         ];
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->login;
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername(): string
+    {
+        return $this->login;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }

@@ -22,13 +22,13 @@ class Controller
     }
 
     /**
-     * @Route("/api/v1/add-task", methods={"GET"})
+     * @Route("/api/v1/add-task", methods={"POST"})
      *
      */
     public function addTaskAction(Request $request): Response
     {
-        $taskTitle = $request->query->get('title');
-        $lessonId = $request->query->get('lessonId');
+        $taskTitle = $request->request->get('title');
+        $lessonId = $request->request->get('lessonId');
         $taskId = $this->taskService->saveTask($taskTitle, $lessonId);
         [$data, $code] = $taskId === null ?
             [['success' => false], 400] :

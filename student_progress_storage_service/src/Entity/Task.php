@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      indexes={
  *         @ORM\Index(name="task__lesson_id__ind", columns={"lesson_id"})
  *     })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=App\Repository\TaskRepository::class)
  */
 class Task
 {
