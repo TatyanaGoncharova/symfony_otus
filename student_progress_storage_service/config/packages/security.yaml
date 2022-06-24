@@ -17,9 +17,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         token:
-            pattern: ^/api/v1/token
+            pattern: ^/api/v1/get-token
             security: false
         main:
+            security: false
             stateless: true
             guard:
                 authenticators:
@@ -45,7 +46,6 @@ security:
         - { path: ^/api/v1/add-unit, roles: ROLE_TEACHER, methods: [ POST ] }
         - { path: ^/api/v1/delete-unit, roles: ROLE_TEACHER, methods: [ DELETE ] }
         - { path: ^/api/v1/get-unit, roles: ROLE_TEACHER, methods: [ GET ] }
-        - { path: ^/api/v1/get-token, roles: ROLE_STUDENT, methods: [ GET ] }
         - { path: ^/api/v1/delete-user, roles: ROLE_ADMIN, methods: [ DELETE ] }
         - { path: ^/api/v1/delete-course, roles: ROLE_ADMIN, methods: [ DELETE ] }
         - { path: ^/api/v1/delete-skill, roles: ROLE_ADMIN, methods: [ DELETE ] }

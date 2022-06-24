@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="progress__user_id__ind", columns={"user_id"}),
  *         @ORM\Index(name="progress__task_id__ind", columns={"task_id"})
  *     })
- * @ORM\Entity(repositoryClass=ProgressRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\ProgressRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Progress
 {
@@ -85,6 +86,9 @@ class Progress
         return $this->createdAt;
     }
 
+    /**
+     * @ORM\PrePersist()
+     */
     public function setCreatedAt(): void {
         $this->createdAt = new DateTime();
     }
@@ -93,6 +97,10 @@ class Progress
         return $this->updatedAt;
     }
 
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
     public function setUpdatedAt(): void {
         $this->updatedAt = new DateTime();
     }
@@ -119,10 +127,13 @@ class Progress
 
     public function toArray(): array
     {
+        $lesson = $this->task->getLesson();
         return [
             'id' => $this->id,
             'student' => $this->student->getLogin(),
             'task' => $this->task->getTitle(),
+            'lesson' => $lesson->getTitle(),
+            'course' => $lesson->getCourse()->getTitle(),
             'rate' => $this->rate,
         ];
     }
