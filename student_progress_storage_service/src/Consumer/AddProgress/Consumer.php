@@ -42,9 +42,13 @@ final class Consumer implements ConsumerInterface
             return $this->reject($e->getMessage());
         }
 
-        $this->progressService->saveProgress($progress->getUserId(), $progress->getTaskId(), $progress->getRate());
-        $this->entityManager->clear();
-        $this->entityManager->getConnection()->close();
+        try {
+            $this->progressService->saveProgress($progress->getUserId(), $progress->getTaskId(), $progress->getRate());
+            $this->entityManager->clear();
+            $this->entityManager->getConnection()->close();
+        } catch (Throwable $e) {
+            $this->reject($e->getMessage());
+        }
 
         return self::MSG_ACK;
     }
