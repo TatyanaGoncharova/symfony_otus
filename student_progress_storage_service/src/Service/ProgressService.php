@@ -32,14 +32,14 @@ class ProgressService
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function saveProgress(int $userId, int $taskId, int $rate): ?int
+    public function saveProgress(int $userId, int $taskId, int $rate): bool
     {
         $progress = new Progress();
         $student = $this->getUserById($userId);
         $task = $this->getTaskById($taskId);
 
         if (empty($task) || empty($student)) {
-            return null;
+            return false;
         }
         $progress->setTask($task);
         $progress->setStudent($student);
@@ -47,7 +47,7 @@ class ProgressService
         $this->entityManager->persist($progress);
         $this->entityManager->flush();
         $this->cache->invalidateTags(["progress_userId_{$userId}"]);
-        return $progress->getId();
+        return true;
     }
 
     private function getTaskById(int $taskId)

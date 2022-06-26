@@ -39,7 +39,7 @@ class Task
      *   @ORM\JoinColumn(name="lesson_id", referencedColumnName="id")
      * })
      */
-    private Lesson $lesson;
+    private ?Lesson $lesson;
 
     public function getId(): int
     {
@@ -61,12 +61,12 @@ class Task
         $this->title = $title;
     }
 
-    public function getLesson(): Lesson
+    public function getLesson(): ?Lesson
     {
         return $this->lesson;
     }
 
-    public function setLesson(Lesson $lesson): void
+    public function setLesson(?Lesson $lesson): void
     {
         $this->lesson = $lesson;
     }

@@ -55,3 +55,8 @@ services:
     App\Service\AsyncService:
         calls:
             - [ 'registerProducer', [ !php/const App\Service\AsyncService::ADD_PROGRESS, '@old_sound_rabbit_mq.add_progress_producer' ] ]
+
+    monolog.formatter.app_formatter:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "[%%level_name%%]: [%%datetime%%] %%message%%\n"

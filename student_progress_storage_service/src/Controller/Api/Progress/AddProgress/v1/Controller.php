@@ -15,7 +15,7 @@ class Controller
 {
 
     private ProgressService $progressService;
-    private $asyncService;
+    private AsyncService $asyncService;
 
     public function __construct(ProgressService $progressService, AsyncService  $asyncService)
     {
@@ -24,14 +24,14 @@ class Controller
     }
 
     /**
-     * @Route("/api/v1/add-progress", methods={"GET"})
+     * @Route("/api/v1/add-progress", methods={"POST"})
      *
      */
     public function addProgressAction(Request $request): Response
     {
-        $userId = $request->query->get('userId');
-        $taskId = $request->query->get('taskId');
-        $rate = $request->query->get('rate');
+        $userId = $request->request->get('userId');
+        $taskId = $request->request->get('taskId');
+        $rate = $request->request->get('rate');
         $message = (new ProgressAMQPDTO($userId, $taskId, $rate))->toAMQPMessage();
         $result = $this->asyncService->publishToExchange(AsyncService::ADD_PROGRESS, $message);
         [$data, $code] = empty($result) ?
