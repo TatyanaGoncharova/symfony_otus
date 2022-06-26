@@ -127,14 +127,15 @@ class Progress
 
     public function toArray(): array
     {
-        $lesson = $this->task->getLesson();
+        $lesson = isset($this->task) ? $this->task->getLesson() : null;
         return [
             'id' => $this->id,
             'student' => $this->student->getLogin(),
-            'task' => $this->task->getTitle(),
-            'lesson' => $lesson->getTitle(),
-            'course' => $lesson->getCourse()->getTitle(),
+            'task' => isset($this->task) ? $this->task->getTitle() : null,
+            'lesson' => !empty($lesson) ? $lesson->getTitle() : null,
+            'course' => !empty($lesson) ? $lesson->getCourse()->getTitle() : null,
             'rate' => $this->rate,
         ];
     }
+
 }

@@ -17,8 +17,11 @@ class TaskService
         $this->entityManager = $entityManager;
     }
 
-    public function saveTask(string $title, int $lessonId): ?int
+    public function saveTask(string $title, int $lessonId): bool
     {
+        if(empty($title)){
+            return false;
+        }
         $task = new Task();
         $task->setTitle($title);
         $lessonRepository = $this->entityManager->getRepository(Lesson::class);
@@ -27,7 +30,7 @@ class TaskService
         $this->entityManager->persist($task);
         $this->entityManager->flush();
 
-        return $task->getId();
+        return true;
     }
 
     public function updateTaskTitle(int $taskId, string $taskTitle): bool
